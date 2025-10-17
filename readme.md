@@ -102,3 +102,4 @@ API Service ถูกแบ่งเป็น Microservices/Modules ภายใ
 | **RBAC** | ใช้ **JWT** Token ตรวจสอบสิทธิ์ (Role-Based Access Control) ใน **AuthService** Middleware. |
 | **Audit Log** | บันทึกทุก Transaction/การเปลี่ยนสถานะสำคัญ (เช่น การจ่ายเงิน, การยกเลิกคิว) ใน DB Layer. |
 | **Monitoring** | Prometheus/Grafana เพื่อติดตาม Latency, Error Rate, และ **Queue Length**. |
+
