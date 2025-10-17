@@ -120,15 +120,18 @@ API Service ถูกแบ่งเป็น Microservices/Modules ภายใ
 
 
 **Key Steps:**
-1.  **POS** $\to$ **API**: Sends `POST /payments` with `X-Idempotency-Key`.
-2.  **API** $\to$ **Payment GW**: Requests QR Code.
-3.  **API** $\to$ **POS**: Returns `202 Accepted` + `qr_code_url`.
-4.  **(Customer Scans/Pays)**
-5.  **Payment GW** $\to$ **API**: Sends **Webhook** with status **`PAID`**.
-6.  **API** $\to$ **Realtime Service**: Emits **`order.status_changed`** to **POS/Staff**.
-7.  **API** $\to$ **Worker Service** (Queue): Sends Print Job.
-8.  **Worker** $\to$ **Printer**: Prints Receipt.
-
+1.  **POS/Staff** $\to$ **API Gateway**: Sends `POST /payments` with `Idempotency-Key`.
+2.  **API Gateway** $\to$ **Payment Service**: Sends `createPaymentOrder`.
+3.  **Payment Service** $\to$ **Payment Gateway (PromptPay)**: Sends `PGW.createQR(amount, ref)`.
+4.  **Payment Gateway** $\to$ **Payment Service**: Returns `QR payload`.
+5.  **Payment Service** $\to$ **API Gateway**: Returns `payment_id + QR`.
+6.  **API Gateway** $\to$ **POS/Staff**: Returns `201 Created (QR)`.
+7.  **Payment Gateway** $\to$ **API Service (Webhook)**: Sends `Webhook: payment succeeded`(Asynchronous Callback).
+8.  **API Service** $\to$ **SQL Database**: Sends `UPDATE payments=paid, order=closed`.
+9.  **API Service** $\to$ **Background Worker**: Sends `print_receipt`.
+10. **Background Worker** $\to$ **Receipt Printer**: Sends `publish.payment.paid`.
+11. **API Service** $\to$ **Realtime (WS)**: Sends `publish.payment.paid` (Realtime Event).
+12. **POS/Staff** สามารถดึงสถานะซ้ำได้ด้วย `GET /payments/{id}` หรือรับสถานะผ่าน Realtime.
 ***
 
 ## 5. Non-functional Requirements & Quality
