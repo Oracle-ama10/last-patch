@@ -30,9 +30,9 @@
 
  Success Response (2xx)
  โครงสร้างสม่ำเสมอ: success: true และมี Block data
- // ตัวอย่าง: HTTP 201 Created สำหรับ /queue-tickets
- 
+
  ```
+ // ตัวอย่าง: HTTP 201 Created สำหรับ /queue-tickets
 {
   "success": true,
   "data": {
