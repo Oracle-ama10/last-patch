@@ -32,7 +32,6 @@
  โครงสร้างสม่ำเสมอ: success: true และมี Block data
 
  ```
-
  // ตัวอย่าง: HTTP 201 Created สำหรับ /queue-tickets
 {
   "success": true,
@@ -45,7 +44,6 @@
     "timestamp": "2025-10-17T11:00:00Z"
   }
 }
-
 ```
 
 
@@ -62,7 +60,6 @@
     "http_status": 409
   }
 }
-
 ```
 
 ***
