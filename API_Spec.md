@@ -23,6 +23,27 @@
 | :--- | :--- | :--- | :--- |
 | **`queue.updated`** | Customer, Staff Tablet | แจ้งเตือนเมื่อสถานะคิวเปลี่ยน หรือมีการเรียกคิวใหม่ | เมื่อคิวถูกเรียก (**`CALLED`**) หรือสถานะคิวเปลี่ยน. |
 | **`table.status_changed`** | Staff Tablet, POS | แจ้งเตือนเมื่อสถานะโต๊ะเปลี่ยน | เมื่อพนักงานเปลี่ยนสถานะโต๊ะ (เช่น `SERVING` $\to$ `CHECKOUT` $\to$ `VACANT`). |
-| **`order.status_changed`** | POS, Kitchen Display | แจ้งเตือนเมื่อออร์เดอร์เปลี่ยนสถานะ เช่น การชำระเงินสำเร็จ (PAID) | เมื่อ Payment Gateway ส่ง Callback ยืนยันว่าการชำระเงินสำเร็จ. |
+| **`order.status_changed`** | POS, Kitchen Display | แจ้งเตือนเมื่อออร์เดอร์เปลี่ยนสถานะ เช่น การชำระเงินสำเร็จ (PAID) | เมื่อ Payment Gateway ส่ง Callback
+ยืนยันว่าการชำระเงินสำเร็จ. |
+
+### 3.4. รูปแบบ Response และ Error (Consistency)
+
+ Success Response (2xx)
+ โครงสร้างสม่ำเสมอ: success: true และมี Block data
+ // ตัวอย่าง: HTTP 201 Created สำหรับ /queue-tickets
+ 
+ ```
+{
+  "success": true,
+  "data": {
+    "ticket_id": "A007",
+    "status": "WAITING",
+    "eta_minutes": 15
+  },
+  "metadata": {
+    "timestamp": "2025-10-17T11:00:00Z"
+  }
+}
+```
 
 ***
