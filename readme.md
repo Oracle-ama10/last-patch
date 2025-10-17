@@ -21,10 +21,10 @@
 | **Customer Frontend** | Presentation | **HTTPS**, **WSS** | Queue Status Tracking, Menu Display |
 | **Staff Tablet App** | Presentation | **HTTPS**, **WSS** | Real-time Table Management, Order Taking |
 | **POS App (Cashier)** | Presentation | **HTTPS** | Billing, **Idempotent** Payment, Printing |
-| **Kopihub API Service** | Application | **HTTPS** (REST) | **Auth (JWT/RBAC)**, Core Business Logic |
-| **Kopihub Realtime Service** | Application | **WSS** | **Notification** (Queue/Table Update $\leq 2s$) |
-| **Kopihub Worker Service** | Application | **Queue** (RabbitMQ/Kafka) | Asynchronous Task: **Printing**, Report Generation |
-| **Database** | Data | **SQL** (PostgreSQL) | Persistent Data (ACID) |
+| **API & Realtime Server** | Application | **REST API (HTTPS), HTTP/HTTPS**  | Core Business Logic, Auth (RBAC/JWT), Idempotency Check |
+| **Background Worker** | Application | **Queue, HTTPS (Webhook)** | Asynchronous Task: Printing, Retrying/Queue, Payment Webhook Processing |
+| **Realtime Service** | Application | **WSS, Redis Pub/Sub**  | Fan-out Notifications (Queue/Table/Order Status $\leq 2s$) |
+| **Database** | Data | **SQL** (PostgreSQL) | Persistent Data (e.g., Orders, Tickets, Tables, Audit Logs) |
 | **Cache** | Data | **Redis Protocol** | Real-time Status Cache, **Rate Limiting** |
 
 **Rationale Highlights:**
@@ -44,6 +44,7 @@ API Service ถูกแบ่งเป็น Microservices/Modules ภายใ
 | **OrderService** | สร้าง/อัปเดต Order, Validate Order Items | `/orders`, `/order-items` (REST) | DB Layer, **Worker Service** (Printing Job) |
 | **PaymentService** | เชื่อมต่อ **PromptPay GW**, Idempotency Check, Transaction | `/payments`, `/webhook` (REST) | External Payment GW, DB Layer |
 | **ReportService** | ประมวลผล Report ยอดขาย/เวลารอ (Near Real-time) | `/reports` (REST) | DB Layer, Worker Service (Background Report) |
+| **NotificationService** | จัดการการส่ง Realtime Event ผ่าน WebSocket | `emit(event_name)` | Realtime Service |
 | **DB Layer** | ORM/SQL Access, Data Validation | SQL | PostgreSQL |
 
 ***
